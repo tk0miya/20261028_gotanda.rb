@@ -1,0 +1,437 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>人間のための RuboCop プラグインが AI のハーネスになるまで</title>
+<link rel="stylesheet" href="tim-slides.css">
+<style>
+/* テンプレートにない、自己紹介スライド専用の装飾 */
+.slide .profile-photo {
+  position: absolute;
+  left: 730px;
+  top: 104px;
+  width: 180px;
+  height: 180px;
+  margin: 0;
+}
+
+.slide .profile-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* タイトルと画像だけのスライド。スクリーンショットをトリミングせず、タイトルの下いっぱいに表示する */
+.slide.content-image.image-only .pic {
+  left: 33px;
+  top: 112px;
+  width: 895px;
+  height: 376px;
+}
+
+/* 枠線を画像の外周に沿わせるため、img を画像の縦横比のまま中央に置く */
+.slide.content-image.image-only .pic {
+  display: flex;
+  justify-content: center;
+}
+
+.slide.content-image.image-only .pic img {
+  width: auto;
+  max-width: 100%;
+  box-sizing: border-box;
+  border: 1px solid #d9d9d9;
+}
+
+/* 1 行の説明と画像のスライド。説明の下に画像を中央揃えで置く */
+.slide.content-image.lead-image .body {
+  width: 895px;
+}
+
+.slide.content-image.lead-image .pic {
+  left: 33px;
+  top: 184px;
+  width: 895px;
+  height: 302px;
+  display: flex;
+  justify-content: center;
+}
+
+.slide.content-image.lead-image .pic img {
+  width: auto;
+  max-width: 100%;
+  box-sizing: border-box;
+  border: 1px solid #d9d9d9;
+}
+
+/* 画像の出典。スライド番号の左に右揃えで置く */
+.slide .source {
+  position: absolute;
+  right: 72px;
+  top: 499px;
+  margin: 0;
+  padding: 4.8px 9.6px;
+  font-size: 8pt;
+  color: var(--text);
+}
+
+.slide .icon {
+  width: 1em;
+  height: 1em;
+  margin-left: 0.2em;
+  vertical-align: -0.1em;
+  fill: currentColor;
+}
+</style>
+</head>
+<body class="projection">
+
+<section class="slide cover">
+  <h1>人間のための<br>RuboCop プラグインが<br>AI のハーネスになるまで</h1>
+  <p class="subtitle">Gotanda.rb#70 / Takeshi KOMIYA / 2026-10-28</p>
+  <img class="logo" src="images/logo-white.png" alt="TIMEINTERMEDIA">
+</section>
+
+<section class="slide content">
+  <h2>自己紹介</h2>
+  <div class="body">
+    <ul>
+      <li>小宮 健（Takeshi KOMIYA）
+        <ul>
+          <li>@tk0miya
+            <svg class="icon" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>GitHub</title><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.070 3.633 17.700 3.633 17.700c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.070 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.930 0-1.310.465-2.380 1.235-3.220-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.300 1.230.96-.267 1.980-.399 3-.405 1.020.006 2.040.138 3 .405 2.280-1.552 3.285-1.230 3.285-1.230.645 1.653.24 2.873.12 3.176.765.840 1.230 1.910 1.230 3.220 0 4.610-2.805 5.625-5.475 5.920.42.36.81 1.096.81 2.220 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+            <svg class="icon" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>X</title><path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"/></svg>
+          </li>
+        </ul>
+      </li>
+      <li>CTO of TIME INTERMEDIA, Inc.</li>
+      <li>OSS Developer
+        <ul>
+          <li>Sphinx（Python 製ドキュメンテーションツール）</li>
+          <li>rbs_rails メンテナ（Rails アプリ用型生成ツール）</li>
+        </ul>
+      </li>
+      <li>書籍: Sphinx をはじめよう（オライリー・ジャパン）</li>
+    </ul>
+  </div>
+  <figure class="profile-photo"><img src="images/tk0miya.jpg" alt=""></figure>
+</section>
+
+<section class="slide content">
+  <h2>作ってきた RuboCop プラグイン</h2>
+  <div class="body">
+    <ul>
+      <li>rubocop-rbs_inline</li>
+      <li>rubocop-rspec-unused-let</li>
+      <li>rubocop-numbered-params</li>
+      <li>rubocop-prefer_it_parameter</li>
+      <li>rubocop-rspec-structure</li>
+      <li>rubocop-instance_variable_access</li>
+      <li>rubocop-herb</li>
+    </ul>
+  </div>
+</section>
+
+<section class="slide content">
+  <h2>rubocop-rbs_inline</h2>
+  <div class="body">
+    <p>rbs-inline の型注釈の書き方を揃える</p>
+    <pre><code class="language-ruby"># bad: 同じ型を二重に書いている
+# @rbs name: String
+#: (String) -&gt; String
+def greet(name) = "Hello, #{name}"</code></pre>
+  </div>
+</section>
+
+<section class="slide content">
+  <h2>rubocop-rbs_inline</h2>
+  <div class="body">
+    <p>rbs-inline の型注釈の書き方を揃える</p>
+    <pre data-lines="2-3"><code class="language-ruby"># bad: 同じ型を二重に書いている
+# @rbs name: String
+#: (String) -&gt; String
+def greet(name) = "Hello, #{name}"
+
+# good
+# @rbs name: String
+# @rbs return: String
+def greet(name) = "Hello, #{name}"</code></pre>
+  </div>
+</section>
+
+<section class="slide content">
+  <h2>rubocop-rspec-unused-let</h2>
+  <div class="body">
+    <p>使われていない let を見つける</p>
+    <pre><code class="language-ruby">RSpec.describe Foo do
+  let(:used)   { 1 }
+  let(:unused) { 2 } # 誰も参照していない
+
+  it { expect(used).to eq(1) }
+end</code></pre>
+  </div>
+</section>
+
+<section class="slide content">
+  <h2>rubocop-rspec-unused-let</h2>
+  <div class="body">
+    <p>使われていない let を見つける</p>
+    <pre data-lines="3"><code class="language-ruby">RSpec.describe Foo do
+  let(:used)   { 1 }
+  let(:unused) { 2 } # 誰も参照していない
+
+  it { expect(used).to eq(1) }
+end</code></pre>
+  </div>
+</section>
+
+<section class="slide content">
+  <h2>rubocop-numbered-params</h2>
+  <div class="body">
+    <p>1 行ブロックは numbered parameter で</p>
+    <pre><code class="language-ruby"># bad
+users.map { |user| user.name }</code></pre>
+  </div>
+</section>
+
+<section class="slide content">
+  <h2>rubocop-numbered-params</h2>
+  <div class="body">
+    <p>1 行ブロックは numbered parameter で</p>
+    <pre data-lines="2"><code class="language-ruby"># bad
+users.map { |user| user.name }
+
+# good
+users.map { _1.name }</code></pre>
+  </div>
+</section>
+
+<section class="slide content">
+  <h2>rubocop-prefer_it_parameter</h2>
+  <div class="body">
+    <p>1 行ブロックは it で</p>
+    <pre><code class="language-ruby"># bad
+users.map { |user| user.name.upcase }</code></pre>
+  </div>
+</section>
+
+<section class="slide content">
+  <h2>rubocop-prefer_it_parameter</h2>
+  <div class="body">
+    <p>1 行ブロックは it で</p>
+    <pre data-lines="2"><code class="language-ruby"># bad
+users.map { |user| user.name.upcase }
+
+# good
+users.map { it.name.upcase }</code></pre>
+  </div>
+</section>
+
+<section class="slide content">
+  <h2>rubocop-rspec-structure</h2>
+  <div class="body">
+    <p>context と example を分離する（Jev の試作）</p>
+    <pre><code class="language-ruby"># bad
+it "when the user is an admin, allows deletion" do
+end</code></pre>
+  </div>
+</section>
+
+<section class="slide content">
+  <h2>rubocop-rspec-structure</h2>
+  <div class="body">
+    <p>context と example を分離する（Jev の試作）</p>
+    <pre data-lines="2"><code class="language-ruby"># bad
+it "when the user is an admin, allows deletion" do
+end
+
+# good
+context "when the user is an admin" do
+  it "allows deletion" do
+  end
+end</code></pre>
+  </div>
+</section>
+
+<section class="slide content">
+  <h2>rubocop-instance_variable_access</h2>
+  <div class="body">
+    <p>インスタンス変数は reader 経由で読む</p>
+    <pre><code class="language-ruby"># bad
+def full_name = "#{@first_name} #{@last_name}"</code></pre>
+  </div>
+</section>
+
+<section class="slide content">
+  <h2>rubocop-instance_variable_access</h2>
+  <div class="body">
+    <p>インスタンス変数は reader 経由で読む</p>
+    <pre data-lines="2"><code class="language-ruby"># bad
+def full_name = "#{@first_name} #{@last_name}"
+
+# good
+attr_reader :first_name, :last_name
+
+def full_name = "#{first_name} #{last_name}"</code></pre>
+  </div>
+</section>
+
+<section class="slide content">
+  <h2>RuboCop プラグインを作った目的</h2>
+  <div class="body">
+    <ul>
+      <li>AI は<strong>新しい記法</strong>を知らない・使わない
+        <ul>
+          <li><code>_1</code>（numbered-params）</li>
+          <li><code>it</code>（prefer_it_parameter）</li>
+          <li>型注釈（rbs_inline）</li>
+        </ul>
+      </li>
+      <li>コーディングルールを<strong>自己検証</strong>可能に
+        <ul>
+          <li>context 構造の強制（rspec-structure）</li>
+          <li>reader 利用の強制（instance_variable_access）</li>
+        </ul>
+      </li>
+      <li>リファクタリング時の<strong>ゴミ</strong>を検知
+        <ul>
+          <li>未使用 let 変数の検知（rspec-unused-let）</li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<section class="slide content">
+  <h2>RuboCop プラグインの役割が変わってきた</h2>
+  <div class="body">
+    <ul>
+      <li>当初: 人間と AI の両方が書く前提
+        <ul>
+          <li>均質なコード、うっかりミスを減らす</li>
+        </ul>
+      </li>
+      <li>実装が AI 任せに: 良いコードを出させる</li>
+      <li>最近: <strong>AI をサポートする RuboCop プラグイン</strong>
+        <ul>
+          <li>ゴミの検出、レビューしやすい構造</li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<section class="slide content">
+  <h2>RuboCop プラグインの役割が変わってきた</h2>
+  <div class="body">
+    <ul>
+      <li>当初: 人間と AI の両方が書く前提
+        <ul>
+          <li>均質なコード、うっかりミスを減らす</li>
+        </ul>
+      </li>
+      <li>実装が AI 任せに: 良いコードを出させる</li>
+      <li>最近: <strong>AI をサポートする RuboCop プラグイン</strong>
+        <ul>
+          <li>ゴミの検出、レビューしやすい構造</li>
+          <li>自己検証可能な規約を提供する（= ハーネス）</li>
+          <li>プロンプト &lt; RuboCop プラグイン</li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<section class="slide content-image image-only">
+  <h2>Pencils Down</h2>
+  <figure class="pic contain"><img src="images/pencils_down.png" alt="DHH の「It's pencils down, people.」というポスト"></figure>
+  <p class="source">https://x.com/dhh/status/2102936073642869121</p>
+</section>
+
+<section class="slide content-image image-only">
+  <h2>Pencils Down</h2>
+  <figure class="pic contain"><img src="images/kaigionrails2026-andpad-pencil-board.png" alt="ANDPAD ブースの「鉛筆を置かない場所 調査」ボード"></figure>
+  <p class="source">https://x.com/nysalor/status/2111091190103966017</p>
+</section>
+
+<section class="slide content">
+  <h2>コード品質はどれくらい重要になる？</h2>
+  <div class="body">
+    <ul>
+      <li>答えは不明だが、<strong>整え続けている</strong>
+        <ul>
+          <li>いまでもコードは書く回数よりも、読む回数が多い（はず）</li>
+          <li>整ったコード、コンパクトなコードには価値がある（はず）</li>
+          <li>新しい記法に効果があるかは自信なし</li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<section class="slide content">
+  <h2>実はまだ紹介していないプラグインがあります</h2>
+  <div class="body">
+    <ul>
+      <li>rubocop-rbs_inline</li>
+      <li>rubocop-rspec-unused-let</li>
+      <li>rubocop-numbered-params</li>
+      <li>rubocop-prefer_it_parameter</li>
+      <li>rubocop-rspec-structure</li>
+      <li>rubocop-instance_variable_access</li>
+      <li>rubocop-herb</li>
+    </ul>
+  </div>
+</section>
+
+<!-- 前のスライドと同じ内容で、rubocop-herb だけを強調する -->
+<section class="slide content">
+  <h2>実はまだ紹介していないプラグインがあります</h2>
+  <div class="body">
+    <ul>
+      <li>rubocop-rbs_inline</li>
+      <li>rubocop-rspec-unused-let</li>
+      <li>rubocop-numbered-params</li>
+      <li>rubocop-prefer_it_parameter</li>
+      <li>rubocop-rspec-structure</li>
+      <li>rubocop-instance_variable_access</li>
+      <li><strong>rubocop-herb</strong></li>
+    </ul>
+  </div>
+</section>
+
+<section class="slide content-image lead-image">
+  <h2>宣伝</h2>
+  <div class="body">
+    <p>仙台Ruby会議 #03 で rubocop-herb の話をします</p>
+  </div>
+  <figure class="pic contain"><img src="images/sendai03.png" alt="仙台Ruby会議 #03 のサイトのファーストビュー"></figure>
+</section>
+
+<section class="slide content-image lead-image">
+  <h2>宣伝</h2>
+  <div class="body">
+    <p>仙台Ruby会議 #03 で rubocop-herb の話をします</p>
+  </div>
+  <figure class="pic contain"><img src="images/talk.png" alt="トーク「Building a Unified Ecosystem for ERB Development」の紹介"></figure>
+</section>
+
+<section class="slide content">
+  <h2>まとめ</h2>
+  <div class="body">
+    <ul>
+      <li>規約はプロンプトより <strong>RuboCop プラグイン</strong>にする</li>
+      <li>人間のための RuboCop プラグインは AI にも効く</li>
+      <li>最初から AI のために作るのもアリ</li>
+    </ul>
+  </div>
+</section>
+
+<section class="slide closing">
+  <h1>ご清聴ありがとう<br>ございました</h1>
+  <img class="slogan" src="images/slogan.png" alt="SYSTEM LIFE SOLUTION! www.timedia.co.jp">
+</section>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script src="tim-slides.js"></script>
+</body>
+</html>
