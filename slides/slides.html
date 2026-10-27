@@ -276,25 +276,22 @@ def full_name = "#{first_name} #{last_name}"</code></pre>
 </section>
 
 <section class="slide content">
-  <h2>RuboCop プラグインを作った目的</h2>
+  <h2>もともとは人間のために作っていた</h2>
   <div class="body">
     <ul>
-      <li>AI は<strong>新しい記法</strong>を知らない・使わない
+      <li><strong>新しい記法</strong>の採用
         <ul>
-          <li><code>_1</code>（numbered-params）</li>
-          <li><code>it</code>（prefer_it_parameter）</li>
-          <li>型注釈（rbs_inline）</li>
+          <li><code>_1</code>、<code>it</code>、型注釈</li>
         </ul>
       </li>
-      <li>コーディングルールを<strong>自己検証</strong>可能に
+      <li><strong>間違い</strong>の検出
         <ul>
-          <li>context 構造の強制（rspec-structure）</li>
-          <li>reader 利用の強制（instance_variable_access）</li>
+          <li>未使用の let 変数</li>
         </ul>
       </li>
-      <li>リファクタリング時の<strong>ゴミ</strong>を検知
+      <li><strong>実行可能</strong>なコーディングルール
         <ul>
-          <li>未使用 let 変数の検知（rspec-unused-let）</li>
+          <li>context 構造、reader 経由のアクセス</li>
         </ul>
       </li>
     </ul>
@@ -302,18 +299,38 @@ def full_name = "#{first_name} #{last_name}"</code></pre>
 </section>
 
 <section class="slide content">
-  <h2>RuboCop プラグインの役割が変わってきた</h2>
+  <h2>AI の進化とともに役割が変わってきた</h2>
+  <div class="body">
+    <table>
+      <thead>
+        <tr><th>時代</th><th>AI</th><th>RuboCop プラグイン</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>AI が未熟な頃</td><td>ミスが多い</td><td>知識を与え、ミスを正す</td></tr>
+        <tr><td>AI と伴走する時代</td><td>精度が上がった</td><td>ずれを直し、均質にする</td></tr>
+        <tr><td>AI に任せる未来</td><td>丸投げ</td><td>？</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="slide content">
+  <h2>AI が未熟な頃</h2>
   <div class="body">
     <ul>
-      <li>当初: 人間と AI の両方が書く前提
+      <li>人間に対する cop と<strong>変わらない</strong>
         <ul>
-          <li>均質なコード、うっかりミスを減らす</li>
+          <li>書く相手が人間から AI に変わっただけ</li>
         </ul>
       </li>
-      <li>実装が AI 任せに: 良いコードを出させる</li>
-      <li>最近: <strong>AI をサポートする RuboCop プラグイン</strong>
+      <li><strong>知識を与える</strong>
         <ul>
-          <li>ゴミの検出、レビューしやすい構造</li>
+          <li>新しい記法を知らない・使わない AI に教える</li>
+        </ul>
+      </li>
+      <li><strong>ミスを訂正する</strong>
+        <ul>
+          <li>うっかりミスを機械的に指摘する</li>
         </ul>
       </li>
     </ul>
@@ -321,19 +338,18 @@ def full_name = "#{first_name} #{last_name}"</code></pre>
 </section>
 
 <section class="slide content">
-  <h2>RuboCop プラグインの役割が変わってきた</h2>
+  <h2>AI と伴走する時代</h2>
   <div class="body">
     <ul>
-      <li>当初: 人間と AI の両方が書く前提
+      <li>AI の出力の<strong>精度が上がってきた</strong></li>
+      <li>少し含まれる<strong>ミスを調整する</strong>
         <ul>
-          <li>均質なコード、うっかりミスを減らす</li>
+          <li>リファクタリング時のゴミを検出</li>
         </ul>
       </li>
-      <li>実装が AI 任せに: 良いコードを出させる</li>
-      <li>最近: <strong>AI をサポートする RuboCop プラグイン</strong>
+      <li>コードを<strong>均質化</strong>する
         <ul>
-          <li>ゴミの検出、レビューしやすい構造</li>
-          <li>自己検証可能な規約を提供する（= ハーネス）</li>
+          <li>自己検証できる規約（= ハーネス）</li>
           <li>プロンプト &lt; RuboCop プラグイン</li>
         </ul>
       </li>
@@ -354,14 +370,24 @@ def full_name = "#{first_name} #{last_name}"</code></pre>
 </section>
 
 <section class="slide content">
-  <h2>コード品質はどれくらい重要になる？</h2>
+  <h2>AI に任せる未来</h2>
+  <div class="body">
+    <ul>
+      <li><strong>コードを読まない</strong>時代になるのか？</li>
+      <li>それでも<strong>整え続ける意味</strong>はあるのか？</li>
+    </ul>
+  </div>
+</section>
+
+<section class="slide content">
+  <h2>いまの答え</h2>
   <div class="body">
     <ul>
       <li>答えは不明だが、<strong>整え続けている</strong>
         <ul>
-          <li>いまでもコードは書く回数よりも、読む回数が多い（はず）</li>
-          <li>整ったコード、コンパクトなコードには価値がある（はず）</li>
-          <li>新しい記法に効果があるかは自信なし</li>
+          <li>コードは書く回数より読む回数が多い（はず）</li>
+          <li>整ったコンパクトなコードには価値がある（はず）</li>
+          <li>新しい記法に意味があるかは自信なし</li>
         </ul>
       </li>
     </ul>
@@ -419,9 +445,9 @@ def full_name = "#{first_name} #{last_name}"</code></pre>
   <h2>まとめ</h2>
   <div class="body">
     <ul>
-      <li>規約はプロンプトより <strong>RuboCop プラグイン</strong>にする</li>
-      <li>人間のための RuboCop プラグインは AI にも効く</li>
-      <li>最初から AI のために作るのもアリ</li>
+      <li>人間のための RuboCop プラグインは <strong>AI にも効く</strong></li>
+      <li>AI と伴走する今は <strong>AI のハーネス</strong>になった</li>
+      <li>AI に任せる未来でも、いまは<strong>整え続ける</strong></li>
     </ul>
   </div>
 </section>
