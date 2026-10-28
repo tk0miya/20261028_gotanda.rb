@@ -276,20 +276,20 @@ def full_name = "#{first_name} #{last_name}"</code></pre>
 </section>
 
 <section class="slide content">
-  <h2>もともとは人間のために作っていた</h2>
+  <h2>もともとは人間向けだった</h2>
   <div class="body">
     <ul>
-      <li><strong>新しい記法</strong>の採用
+      <li><strong>記法</strong>：新しい記法を広める
         <ul>
           <li><code>_1</code>、<code>it</code>、型注釈</li>
         </ul>
       </li>
-      <li><strong>間違い</strong>の検出
+      <li><strong>ミス</strong>：うっかりミスを見つける
         <ul>
           <li>未使用の let 変数</li>
         </ul>
       </li>
-      <li><strong>実行可能</strong>なコーディングルール
+      <li><strong>規約</strong>：ルールを実行可能にする
         <ul>
           <li>context 構造、reader 経由のアクセス</li>
         </ul>
@@ -306,8 +306,8 @@ def full_name = "#{first_name} #{last_name}"</code></pre>
         <tr><th>時代</th><th>AI</th><th>RuboCop プラグイン</th></tr>
       </thead>
       <tbody>
-        <tr><td>AI が未熟な頃</td><td>ミスが多い</td><td>知識を与え、ミスを正す</td></tr>
-        <tr><td>AI と伴走する時代</td><td>精度が上がった</td><td>ずれを直し、均質にする</td></tr>
+        <tr><td>AI が未熟な頃</td><td>ミスが多い</td><td>人間向けと同じ役割</td></tr>
+        <tr><td>AI と伴走する時代</td><td>精度が上がった</td><td>規約を守らせるハーネスに</td></tr>
         <tr><td>AI に任せる未来</td><td>丸投げ</td><td>？</td></tr>
       </tbody>
     </table>
@@ -317,39 +317,26 @@ def full_name = "#{first_name} #{last_name}"</code></pre>
 <section class="slide content">
   <h2>AI が未熟な頃</h2>
   <div class="body">
+    <p>人間向けの cop と<strong>変わらない</strong></p>
     <ul>
-      <li>人間に対する cop と<strong>変わらない</strong>
-        <ul>
-          <li>書く相手が人間から AI に変わっただけ</li>
-        </ul>
-      </li>
-      <li><strong>知識を与える</strong>
-        <ul>
-          <li>新しい記法を知らない・使わない AI に教える</li>
-        </ul>
-      </li>
-      <li><strong>ミスを訂正する</strong>
-        <ul>
-          <li>うっかりミスを機械的に指摘する</li>
-        </ul>
-      </li>
+      <li><strong>記法</strong>：新しい記法を知らない AI に教える</li>
+      <li><strong>ミス</strong>：多いミスを機械的に正す</li>
+      <li><strong>規約</strong>：ルールを機械的にチェックする</li>
     </ul>
+    <p>指摘先が人間から AI に変わっただけ</p>
   </div>
 </section>
 
 <section class="slide content">
   <h2>AI と伴走する時代</h2>
   <div class="body">
+    <p>AI の出力の<strong>精度が上がってきた</strong></p>
     <ul>
-      <li>AI の出力の<strong>精度が上がってきた</strong></li>
-      <li>少し含まれる<strong>ミスを調整する</strong>
+      <li><strong>記法</strong>：古い書き方を新しい記法に寄せる</li>
+      <li><strong>ミス</strong>：リファクタリング時のゴミを拾う</li>
+      <li><strong>規約</strong>：コードを均質化する
         <ul>
-          <li>リファクタリング時のゴミを検出</li>
-        </ul>
-      </li>
-      <li>コードを<strong>均質化</strong>する
-        <ul>
-          <li>自己検証できる規約（= ハーネス）</li>
+          <li>自己検証できる規約 = <strong>ハーネス</strong></li>
           <li>プロンプト &lt; RuboCop プラグイン</li>
         </ul>
       </li>
@@ -385,7 +372,8 @@ def full_name = "#{first_name} #{last_name}"</code></pre>
     <ul>
       <li>答えは不明だが、<strong>整え続けている</strong>
         <ul>
-          <li>コードは書く回数より読む回数が多い（はず）</li>
+          <li>しばらくは人間もコードを読み続ける（はず）</li>
+          <li>AI も既存のコードを読んで真似る（はず）</li>
           <li>整ったコンパクトなコードには価値がある（はず）</li>
           <li>新しい記法に意味があるかは自信なし</li>
         </ul>
@@ -395,7 +383,7 @@ def full_name = "#{first_name} #{last_name}"</code></pre>
 </section>
 
 <section class="slide content">
-  <h2>実はまだ紹介していないプラグインがあります</h2>
+  <h2>最初に紹介した RuboCop プラグインですが…</h2>
   <div class="body">
     <ul>
       <li>rubocop-rbs_inline</li>
@@ -409,9 +397,9 @@ def full_name = "#{first_name} #{last_name}"</code></pre>
   </div>
 </section>
 
-<!-- 前のスライドと同じ内容で、rubocop-herb だけを強調する -->
+<!-- 前のスライドと同じ内容で、rubocop-herb だけを強調して補足を添える -->
 <section class="slide content">
-  <h2>実はまだ紹介していないプラグインがあります</h2>
+  <h2>最初に紹介した RuboCop プラグインですが…</h2>
   <div class="body">
     <ul>
       <li>rubocop-rbs_inline</li>
@@ -420,7 +408,11 @@ def full_name = "#{first_name} #{last_name}"</code></pre>
       <li>rubocop-prefer_it_parameter</li>
       <li>rubocop-rspec-structure</li>
       <li>rubocop-instance_variable_access</li>
-      <li><strong>rubocop-herb</strong></li>
+      <li><strong>rubocop-herb</strong>
+        <ul>
+          <li>実は今日は触れていませんでした</li>
+        </ul>
+      </li>
     </ul>
   </div>
 </section>
@@ -448,6 +440,7 @@ def full_name = "#{first_name} #{last_name}"</code></pre>
       <li>人間のための RuboCop プラグインは <strong>AI にも効く</strong></li>
       <li>AI と伴走する今は <strong>AI のハーネス</strong>になった</li>
       <li>AI に任せる未来でも、いまは<strong>整え続ける</strong></li>
+      <li>仙台Ruby会議 #03、<strong>是非来てください</strong></li>
     </ul>
   </div>
 </section>
